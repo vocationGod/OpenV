@@ -87,13 +87,13 @@ std::shared_ptr<ov::Plugin> ov::PluginLoader::instantiate()
     return std::shared_ptr<Plugin>(plugin, [self, plugin_unregister](Plugin* plugin){ plugin_unregister(plugin); });
 }
 
-std::string_view ov::PluginLoader::name() const
+std::string ov::PluginLoader::name() const
 {
     OPENV_D(const PluginLoader);
     return d->library->name();
 }
 
-std::string_view ov::PluginLoader::errorString() const
+std::string ov::PluginLoader::errorString() const
 {
     OPENV_D(const PluginLoader);
     return d->library->errorString();

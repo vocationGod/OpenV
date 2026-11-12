@@ -1,6 +1,5 @@
 #pragma once
 #include "openv/openv.h"
-#include <string_view>
 #include <string>
 #include <memory>
 namespace ov {
@@ -23,9 +22,9 @@ public:
     
     bool isLoaded() const;
 
-    std::string_view name() const;
+    std::string name() const;
     
-    std::string_view errorString() const;
+    std::string errorString() const;
 
     ov::FunctionPointer resolve(const char* symbol);
 

@@ -1,7 +1,6 @@
 #pragma once
 #include "openv/core/ovElement.h"
 #include "openv/core/ovLayout.h"
-#include <string_view>
 #include <optional>
 #include <string>
 namespace ov {
@@ -27,7 +26,7 @@ public:
     
     ov::Layout layout() const;
     
-    std::string_view name() const;
+    std::string name() const;
 
     std::optional<int> descriptor() const;
     

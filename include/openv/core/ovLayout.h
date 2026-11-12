@@ -6,7 +6,6 @@
  * 备 注 ：OPENV_DECLARE_LAYOUT_TOKENS宏为(排列格式、排列深度、排列位数)
  * ***************************************************************/
 #pragma once
-#include "openv/openv.h"
 #define OPENV_DECLARE_LAYOUT_TOKENS(F) \
     /* YYYY...                      (1 plane) */ \
     F(GREY,         8,      8)  \

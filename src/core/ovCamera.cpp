@@ -105,7 +105,7 @@ ov::Layout ov::Camera::layout() const
     return d->layout;
 }
 
-std::string_view ov::Camera::name() const
+std::string ov::Camera::name() const
 {
     OPENV_D(const Camera);
     return d->name;

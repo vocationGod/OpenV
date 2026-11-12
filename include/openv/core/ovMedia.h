@@ -6,7 +6,6 @@
  * 备 注 ：OPENV_DECLARE_MEDIA_TOKENS宏为(编码格式)
  * ***************************************************************/
 #pragma once
-#include "openv/openv.h"
 #define OPENV_DECLARE_MEDIA_TOKENS(F)\
     /* MPEG1 */                                 \
     F(MPEG1)                                    \
