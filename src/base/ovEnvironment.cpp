@@ -1,24 +1,29 @@
 #include "ovEnvironment.h"
 #include <cstdlib>
 
-const char *ov::Environment::value(const char *key)
+std::string ov::Environment::value(const std::string& key)
 {
-    if(!key) {
-        return {};
+    if(key.empty()) {
+        return "";
     }
 
-    return std::getenv(key);
+    auto var = std::getenv(key.c_str());
+    if(!var) {
+        return "";
+    }
+
+    return var;
 }
 
-bool ov::Environment::setValue(const char *key, const char *var)
+bool ov::Environment::setValue(const std::string& key, const std::string& var)
 {
-    if(!key || !var) {
+    if(key.empty()) {
         return false;
     }
 
 #ifdef _WIN32
-    #define setenv(key, var, rep)   _putenv_s(key, var)
+    return _putenv_s(key.c_str(), var.c_str()) == 0;
 #endif
 
-    return setenv(key, var, 1) == 0; 
+    return setenv(key.c_str(), var.c_str(), 1) == 0; 
 }
