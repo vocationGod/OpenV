@@ -64,7 +64,7 @@ std::shared_ptr<ov::Window> ov::Window::gen(Connector connector, Geometry geomet
             continue;
         }
 
-        auto ins = loader->instantiate();
+        auto ins = loader->instantiate(OPENV_VWIN_MODULE);
         if(!ins) {
             continue;
         }

@@ -52,7 +52,7 @@ std::shared_ptr<ov::Decoder> ov::Decoder::gen(int width, int height, Media media
             continue;
         }
 
-        auto ins = loader->instantiate();
+        auto ins = loader->instantiate(OPENV_VDEC_MODULE);
         if(!ins) {
             continue;
         }

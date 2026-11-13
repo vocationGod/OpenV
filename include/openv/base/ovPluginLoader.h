@@ -27,7 +27,7 @@ public:
     
     const std::string& errorString() const;
 
-    std::shared_ptr<ov::Plugin> instantiate();
+    std::shared_ptr<ov::Plugin> instantiate(const char* module = nullptr);
 
 protected:
     explicit PluginLoader(std::unique_ptr<PluginLoaderPrivate> dd);

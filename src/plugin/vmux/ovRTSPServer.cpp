@@ -60,7 +60,7 @@ std::shared_ptr<ov::RTSPServer> ov::RTSPServer::gen(const std::vector<Session> &
             continue;
         }
 
-        auto ins = loader->instantiate();
+        auto ins = loader->instantiate(OPENV_VMUX_MODULE);
         if(!ins) {
             continue;
         }

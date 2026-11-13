@@ -54,7 +54,7 @@ std::shared_ptr<ov::Encoder> ov::Encoder::gen(int width, int height, Layout layo
             continue;
         }
 
-        auto ins = loader->instantiate();
+        auto ins = loader->instantiate(OPENV_VENC_MODULE);
         if(!ins) {
             continue;
         }

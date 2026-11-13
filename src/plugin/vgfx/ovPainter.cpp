@@ -40,7 +40,7 @@ std::shared_ptr<ov::Painter> ov::Painter::gen(const std::string &dir)
             continue;
         }
 
-        auto ins = loader->instantiate();
+        auto ins = loader->instantiate(OPENV_VGFX_MODULE);
         if(!ins) {
             continue;
         }

@@ -53,7 +53,7 @@ std::shared_ptr<ov::Processor> ov::Processor::gen(Ports ports, int width, int he
             continue;
         }
 
-        auto ins = loader->instantiate();
+        auto ins = loader->instantiate(OPENV_VPSS_MODULE);
         if(!ins) {
             continue;
         }

@@ -1,6 +1,7 @@
 #include "ovPluginLoader.h"
 #include "ovLibrary.h"
 #include <unordered_map>
+#include <cstring>
 #include <mutex>
 
 class ov::PluginLoaderPrivate
@@ -67,13 +68,25 @@ bool ov::PluginLoader::isLoaded() const
     return d->library->isLoaded();
 }
 
-std::shared_ptr<ov::Plugin> ov::PluginLoader::instantiate()
+std::shared_ptr<ov::Plugin> ov::PluginLoader::instantiate(const char* module)
 {
     if(!isLoaded()) {
         return {};
     }
 
     OPENV_D(PluginLoader);
+
+    if(module) {
+        using openv_plugin_module_t = const char*(*)();
+        auto openv_plugin_module = reinterpret_cast<openv_plugin_module_t>(d->library->resolve("openv_plugin_module"));
+        if(!openv_plugin_module) {
+            return {};
+        }
+
+        if(std::strcmp(module, openv_plugin_module())) {
+            return {};
+        }
+    }
 
     using plugin_register_t   = Plugin*(*)();
     using plugin_unregister_t = void(*)(Plugin*);

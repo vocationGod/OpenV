@@ -53,7 +53,7 @@ std::shared_ptr<ov::Camera> ov::Camera::gen(const std::string &name, int width, 
             continue;
         }
 
-        auto ins = loader->instantiate();
+        auto ins = loader->instantiate(OPENV_VCAM_MODULE);
         if(!ins) {
             continue;
         }
