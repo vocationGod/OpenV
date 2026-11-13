@@ -1,6 +1,7 @@
 #include "ovDir.h"
 #include <filesystem>
 #include <algorithm>
+#include <cctype>
 
 std::vector<std::string> ov::Dir::scan(const std::string &dir, const std::vector<std::string> &patterns, bool recurse)
 {
