@@ -35,7 +35,7 @@ public:
     };
     using RenderHints = Flags<RenderHint>;
 
-    struct PaintState { RenderHints renderHints; Brush brush; Font font; Pen pen; std::array<double, 6> transform = {}; };
+    struct PaintState { RenderHints renderHints; Brush brush; Font font; Pen pen; double transform[6]; };
 public:
     static std::shared_ptr<ov::Painter> gen(const std::string& dir = "./plugins");
 
@@ -64,10 +64,11 @@ public:
     virtual void restore();
 
 public:
-    virtual void rotate(double angle);
-    virtual void shear(double hs, double vs);
-    virtual void scale(double sx, double sy);
-    virtual void translate(double dx, double dy);
+    void rotate(double angle);
+    void shear(double hs, double vs);
+    void scale(double sx, double sy);
+    void translate(double dx, double dy);
+    void transform(double m0, double m1, double m2, double m3, double m4, double m5);
 
 public:
     virtual void moveTo(double x, double y) = 0;

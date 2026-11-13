@@ -140,31 +140,43 @@ void ov::Painter::restore()
 
 void ov::Painter::rotate(double angle)
 {
-    OPENV_D(Painter);
-    double c = std::cos(angle);
-    double s = std::sin(angle);
-    d->state.transform = {c, -s, 0, s, c, 0};
-    updatePaintState(d->state);
+    double c = std::cos(angle), s = std::sin(angle);
+    transform(c, -s, 0, s, c, 0);
 }
 
 void ov::Painter::shear(double hs, double vs)
 {
-    OPENV_D(Painter);
-    d->state.transform = {1, hs, 0, vs, 1, 0};
-    updatePaintState(d->state);
+    transform(1, hs, 0, vs, 1, 0);
 }
 
 void ov::Painter::scale(double sx, double sy)
 {
-    OPENV_D(Painter);
-    d->state.transform = {sx, 0, 0, 0, sy, 0};
-    updatePaintState(d->state);
+    transform(sx, 0, 0, 0, sy, 0);
 }
 
 void ov::Painter::translate(double dx, double dy)
 {
+    transform(1, 0, dx, 0, 1, dy);
+}
+
+void ov::Painter::transform(double m0, double m1, double m2, double m3, double m4, double m5)
+{
     OPENV_D(Painter);
-    d->state.transform = { 1, 0, dx + d->state.transform[2], 0, 1, dy + d->state.transform[5] };
+
+    double a0 = d->state.transform[0];
+    double b0 = d->state.transform[1];
+    double e0 = d->state.transform[2];
+    double c0 = d->state.transform[3];
+    double d0 = d->state.transform[4];
+    double f0 = d->state.transform[5];
+
+    d->state.transform[0] = m0 * a0 + m1 * c0;
+    d->state.transform[1] = m0 * b0 + m1 * d0;
+    d->state.transform[2] = m2 * a0 + m5 * c0 + e0;
+    d->state.transform[3] = m3 * a0 + m4 * c0;
+    d->state.transform[4] = m3 * b0 + m4 * d0;
+    d->state.transform[5] = m2 * b0 + m5 * d0 + f0;
+
     updatePaintState(d->state);
 }
 
@@ -240,6 +252,8 @@ void ov::Painter::drawEllipse(double x, double y, double w, double h)
 
 ov::Painter::Painter() : dptr(std::make_unique<PainterPrivate>())
 {
+    OPENV_D(Painter);
+    memset(d->state.transform, 0, sizeof(d->state.transform));
 }
 
 
