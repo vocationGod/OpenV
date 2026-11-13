@@ -36,55 +36,12 @@ std::shared_ptr<ov::RTSPServer> ov::RTSPServer::gen(const std::vector<Session> &
         return {};
     }
 
-    std::string directory = Environment::value("OPENV_RTSPSERVER_PLUGIN_DIR");
-    if(directory.empty()) {
-        directory = Environment::value("OPENV_PLUGIN_DIR");
-    }
-
-    if(directory.empty()) {
-        directory = dir;
-    }
-
-    if(directory.empty()) {
-        return {};
-    }
-
-#ifdef _WIN32
-    std::vector<std::string> patterns = {".dll"};
-#else 
-    std::vector<std::string> patterns = {".so"};
-#endif
-
-    auto pathList = Dir::scan(directory, patterns);
-    if(pathList.empty()) {
-        return {};
-    }
-
-    for(const auto& path : pathList) {
-        auto loader = PluginLoader::gen(path);
-        if(!loader || (!loader->isLoaded() && !loader->load())) {
-            continue;
-        }
-
-        auto ins = loader->instantiate(OPENV_VMUX_MODULE);
-        if(!ins) {
-            continue;
-        }
-
-        if(!ins->query<RTSPServer>()) {
-            continue;
-        }
-
-        auto server = std::static_pointer_cast<RTSPServer>(ins);
-
-        server->d_func()->port       =   port;
-        server->d_func()->sessions   =   lives;
-        server->d_func()->capacity   =   capacity;
-
-        return server;
-    }
-
-    return {};
+    return openv_plugin_factory<ov::RTSPServer>("OPENV_RTSPSERVER_PLUGIN_DIR", OPENV_VMUX_MODULE, dir, 
+        [&](RTSPServer* server) {                 
+            server->d_func()->port       =   port;
+            server->d_func()->sessions   =   lives;
+            server->d_func()->capacity   =   capacity;
+    });
 }
 
 ov::RTSPServer::~RTSPServer()

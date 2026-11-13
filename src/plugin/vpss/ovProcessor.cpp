@@ -29,57 +29,15 @@ std::shared_ptr<ov::Processor> ov::Processor::gen(Ports ports, int width, int he
         return {};
     }
 
-    std::string directory = Environment::value("OPENV_PROCESSOR_PLUGIN_DIR");
-    if(directory.empty()) {
-        directory = Environment::value("OPENV_PLUGIN_DIR");
-    }
+    return openv_plugin_factory<ov::Processor>("OPENV_PROCESSOR_PLUGIN_DIR", OPENV_VPSS_MODULE, dir, 
+        [&](Processor* processor) {                 
+            processor->d_func()->ports     =   ports;
+            processor->d_func()->width     =   width;
+            processor->d_func()->height    =   height;
+            processor->d_func()->layout    =   layout;
+            processor->d_func()->capacity  =   capacity;
 
-    if(directory.empty()) {
-        directory = dir;
-    }
-
-    if(directory.empty()) {
-        return {};
-    }
-
-#ifdef _WIN32
-    std::vector<std::string> patterns = {".dll"};
-#else 
-    std::vector<std::string> patterns = {".so"};
-#endif
-
-    auto pathList = Dir::scan(directory, patterns);
-    if(pathList.empty()) {
-        return {};
-    }
-
-    for(const auto& path : pathList) {
-        auto loader = PluginLoader::gen(path);
-        if(!loader || (!loader->isLoaded() && !loader->load())) {
-            continue;
-        }
-
-        auto ins = loader->instantiate(OPENV_VPSS_MODULE);
-        if(!ins) {
-            continue;
-        }
-
-        if(!ins->query<Processor>()) {
-            continue;
-        }
-
-        auto processor = std::static_pointer_cast<Processor>(ins);
-
-        processor->d_func()->ports     =   ports;
-        processor->d_func()->width     =   width;
-        processor->d_func()->height    =   height;
-        processor->d_func()->layout    =   layout;
-        processor->d_func()->capacity  =   capacity;
-
-        return processor;
-    }
-
-    return {};
+    });
 }
 
 ov::Processor::~Processor()

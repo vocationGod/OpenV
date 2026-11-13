@@ -68,7 +68,7 @@ bool ov::PluginLoader::isLoaded() const
     return d->library->isLoaded();
 }
 
-std::shared_ptr<ov::Plugin> ov::PluginLoader::instantiate(const char* module)
+std::shared_ptr<ov::Plugin> ov::PluginLoader::instantiate(const std::string& module)
 {
     if(!isLoaded()) {
         return {};
@@ -76,7 +76,7 @@ std::shared_ptr<ov::Plugin> ov::PluginLoader::instantiate(const char* module)
 
     OPENV_D(PluginLoader);
 
-    if(module) {
+    if(!module.empty()) {
         using openv_plugin_module_t = const char*(*)();
         auto openv_plugin_module = reinterpret_cast<openv_plugin_module_t>(d->library->resolve("openv_plugin_module"));
         if(!openv_plugin_module) {
@@ -88,7 +88,7 @@ std::shared_ptr<ov::Plugin> ov::PluginLoader::instantiate(const char* module)
             return {};
         }
 
-        if(std::strcmp(module, name)) {
+        if(module != name) {
             return {};
         }
     }

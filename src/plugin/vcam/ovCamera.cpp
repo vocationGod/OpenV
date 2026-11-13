@@ -29,57 +29,14 @@ std::shared_ptr<ov::Camera> ov::Camera::gen(const std::string &name, int width, 
         return {};
     }
 
-    std::string directory = Environment::value("OPENV_CAMERA_PLUGIN_DIR");
-    if(directory.empty()) {
-        directory = Environment::value("OPENV_PLUGIN_DIR");
-    }
-
-    if(directory.empty()) {
-        directory = dir;
-    }
-
-    if(directory.empty()) {
-        return {};
-    }
-
-#ifdef _WIN32
-    std::vector<std::string> patterns = {".dll"};
-#else 
-    std::vector<std::string> patterns = {".so"};
-#endif
-
-    auto pathList = Dir::scan(directory, patterns);
-    if(pathList.empty()) {
-        return {};
-    }
-
-    for(const auto& path : pathList) {
-        auto loader = PluginLoader::gen(path);
-        if(!loader || (!loader->isLoaded() && !loader->load())) {
-            continue;
-        }
-
-        auto ins = loader->instantiate(OPENV_VCAM_MODULE);
-        if(!ins) {
-            continue;
-        }
-
-        if(!ins->query<Camera>()) {
-            continue;
-        }
-
-        auto camera = std::static_pointer_cast<Camera>(ins);
-
-        camera->d_func()->name      =   name;
-        camera->d_func()->width     =   width;
-        camera->d_func()->height    =   height;
-        camera->d_func()->layout    =   layout;
-        camera->d_func()->capacity  =   capacity;
-
-        return camera;
-    }
-
-    return {};
+    return openv_plugin_factory<ov::Camera>("OPENV_CAMERA_PLUGIN_DIR", OPENV_VCAM_MODULE, dir, 
+        [&](Camera* camera) {                 
+            camera->d_func()->name      =   name;
+            camera->d_func()->width     =   width;
+            camera->d_func()->height    =   height;
+            camera->d_func()->layout    =   layout;
+            camera->d_func()->capacity  =   capacity;
+    });
 }
 
 ov::Camera::~Camera()

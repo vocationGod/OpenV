@@ -15,50 +15,8 @@ private:
 };
 
 std::shared_ptr<ov::Painter> ov::Painter::gen(const std::string &dir)
-{
-    std::string directory = Environment::value("OPENV_PAINTER_PLUGIN_DIR");
-    if(directory.empty()) {
-        directory = Environment::value("OPENV_PLUGIN_DIR");
-    }
-
-    if(directory.empty()) {
-        directory = dir;
-    }
-
-    if(directory.empty()) {
-        return {};
-    }
-
-#ifdef _WIN32
-    std::vector<std::string> patterns = {".dll"};
-#else 
-    std::vector<std::string> patterns = {".so"};
-#endif
-
-    auto pathList = Dir::scan(directory, patterns);
-    if(pathList.empty()) {
-        return {};
-    }
-
-    for(const auto& path : pathList) {
-        auto loader = PluginLoader::gen(path);
-        if(!loader || (!loader->isLoaded() && !loader->load())) {
-            continue;
-        }
-
-        auto ins = loader->instantiate(OPENV_VGFX_MODULE);
-        if(!ins) {
-            continue;
-        }
-
-        if(!ins->query<Painter>()) {
-            continue;
-        }
-
-        return std::static_pointer_cast<Painter>(ins);
-    }
-
-    return {};
+{   
+    return openv_plugin_factory<ov::Painter>("OPENV_PAINTER_PLUGIN_DIR", OPENV_VGFX_MODULE, dir);
 }
 
 ov::Painter::~Painter()

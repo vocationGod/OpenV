@@ -40,58 +40,16 @@ std::shared_ptr<ov::Window> ov::Window::gen(Connector connector, Geometry geomet
         return {};
     }
 
-    std::string directory = Environment::value("OPENV_WINDOW_PLUGIN_DIR");
-    if(directory.empty()) {
-        directory = Environment::value("OPENV_PLUGIN_DIR");
-    }
+    return openv_plugin_factory<ov::Window>("OPENV_WINDOW_PLUGIN_DIR", OPENV_VWIN_MODULE, dir, 
+        [&](Window* window) {                 
+            window->d_func()->width      =   width;
+            window->d_func()->height     =   height;
+            window->d_func()->layout     =   layout;
+            window->d_func()->capacity   =   capacity;
+            window->d_func()->geometry   =   geometry;
+            window->d_func()->connector  =   connector;
 
-    if(directory.empty()) {
-        directory = dir;
-    }
-
-    if(directory.empty()) {
-        return {};
-    }
-
-#ifdef _WIN32
-    std::vector<std::string> patterns = {".dll"};
-#else 
-    std::vector<std::string> patterns = {".so"};
-#endif
-
-    auto pathList = Dir::scan(directory, patterns);
-    if(pathList.empty()) {
-        return {};
-    }
-
-    for(const auto& path : pathList) {
-        auto loader = PluginLoader::gen(path);
-        if(!loader || (!loader->isLoaded() && !loader->load())) {
-            continue;
-        }
-
-        auto ins = loader->instantiate(OPENV_VWIN_MODULE);
-        if(!ins) {
-            continue;
-        }
-
-        if(!ins->query<Window>()) {
-            continue;
-        }
-
-        auto window = std::static_pointer_cast<Window>(ins);
-
-        window->d_func()->width      =   width;
-        window->d_func()->height     =   height;
-        window->d_func()->layout     =   layout;
-        window->d_func()->capacity   =   capacity;
-        window->d_func()->geometry   =   geometry;
-        window->d_func()->connector  =   connector;
-
-        return window;
-    }
-
-    return {};
+    });
 }
 
 ov::Window::~Window()

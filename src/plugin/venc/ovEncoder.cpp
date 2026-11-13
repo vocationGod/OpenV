@@ -30,57 +30,14 @@ std::shared_ptr<ov::Encoder> ov::Encoder::gen(int width, int height, Layout layo
         return {};
     }
 
-    std::string directory = Environment::value("OPENV_ENCODER_PLUGIN_DIR");
-    if(directory.empty()) {
-        directory = Environment::value("OPENV_PLUGIN_DIR");
-    }
-
-    if(directory.empty()) {
-        directory = dir;
-    }
-
-    if(directory.empty()) {
-        return {};
-    }
-
-#ifdef _WIN32
-    std::vector<std::string> patterns = {".dll"};
-#else 
-    std::vector<std::string> patterns = {".so"};
-#endif
-
-    auto pathList = Dir::scan(directory, patterns);
-    if(pathList.empty()) {
-        return {};
-    }
-
-    for(const auto& path : pathList) {
-        auto loader = PluginLoader::gen(path);
-        if(!loader || (!loader->isLoaded() && !loader->load())) {
-            continue;
-        }
-
-        auto ins = loader->instantiate(OPENV_VENC_MODULE);
-        if(!ins) {
-            continue;
-        }
-
-        if(!ins->query<Encoder>()) {
-            continue;
-        }
-
-        auto encoder = std::static_pointer_cast<Encoder>(ins);
-
-        encoder->d_func()->media      =   media;
-        encoder->d_func()->width      =   width;
-        encoder->d_func()->height     =   height;
-        encoder->d_func()->layout     =   layout;
-        encoder->d_func()->capacity   =   capacity;
-
-        return encoder;
-    }
-
-    return {};
+    return openv_plugin_factory<ov::Encoder>("OPENV_ENCODER_PLUGIN_DIR", OPENV_VENC_MODULE, dir, 
+        [&](Encoder* encoder) {                 
+            encoder->d_func()->media      =   media;
+            encoder->d_func()->width      =   width;
+            encoder->d_func()->height     =   height;
+            encoder->d_func()->layout     =   layout;
+            encoder->d_func()->capacity   =   capacity;
+    });
 }
 
 ov::Encoder::~Encoder()

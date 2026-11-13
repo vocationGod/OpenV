@@ -28,56 +28,13 @@ std::shared_ptr<ov::Decoder> ov::Decoder::gen(int width, int height, Media media
         return {};
     }
 
-    std::string directory = Environment::value("OPENV_DECODER_PLUGIN_DIR");
-    if(directory.empty()) {
-        directory = Environment::value("OPENV_PLUGIN_DIR");
-    }
-
-    if(directory.empty()) {
-        directory = dir;
-    }
-
-    if(directory.empty()) {
-        return {};
-    }
-
-#ifdef _WIN32
-    std::vector<std::string> patterns = {".dll"};
-#else 
-    std::vector<std::string> patterns = {".so"};
-#endif
-
-    auto pathList = Dir::scan(directory, patterns);
-    if(pathList.empty()) {
-        return {};
-    }
-
-    for(const auto& path : pathList) {
-        auto loader = PluginLoader::gen(path);
-        if(!loader || (!loader->isLoaded() && !loader->load())) {
-            continue;
-        }
-
-        auto ins = loader->instantiate(OPENV_VDEC_MODULE);
-        if(!ins) {
-            continue;
-        }
-
-        if(!ins->query<Decoder>()) {
-            continue;
-        }
-
-        auto decoder = std::static_pointer_cast<Decoder>(ins);
-
-        decoder->d_func()->media     =   media;
-        decoder->d_func()->width     =   width;
-        decoder->d_func()->height    =   height;
-        decoder->d_func()->capacity  =   capacity;
-
-        return decoder;
-    }
-
-    return {};
+    return openv_plugin_factory<ov::Decoder>("OPENV_DECODER_PLUGIN_DIR", OPENV_VDEC_MODULE, dir, 
+        [&](Decoder* decoder) {                 
+            decoder->d_func()->media     =   media;
+            decoder->d_func()->width     =   width;
+            decoder->d_func()->height    =   height;
+            decoder->d_func()->capacity  =   capacity;
+    });
 }
 
 ov::Decoder::~Decoder()

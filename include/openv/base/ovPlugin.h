@@ -1,7 +1,12 @@
 #pragma once
-#include "openv/openv.h"
+#include "openv/base/ovPluginLoader.h"
+#include "openv/base/ovEnvironment.h"
+#include "openv/base/ovDir.h"
 #include <type_traits>
+#include <functional>
 #include <cstring>
+#include <string>
+#include <memory>
 namespace ov {
 
 class OPENV_API Plugin 
@@ -84,4 +89,53 @@ extern "C" OPENV_API const char* openv_plugin_module() { return Name; }
 
 #define OPENV_VWIN_MODULE "vwin"
 #define OPENV_REGISTER_VWIN_PLUGIN(A) OPENV_REGISTER_PLUGIN(A, OPENV_VWIN_MODULE)
+
+template <typename T>
+std::shared_ptr<T> openv_plugin_factory(const std::string& env, const std::string& module, const std::string& dir, const std::function<void(T*)>& setter = {})
+{
+    std::string directory = Environment::value(env);
+    if(directory.empty()) {
+        directory = Environment::value("OPENV_PLUGIN_DIR");
+    }
+
+    if(directory.empty()) {
+        directory = dir;
+    }
+
+    if(directory.empty()) {
+        return {};
+    }
+
+#ifdef _WIN32
+    std::vector<std::string> patterns = {".dll"};
+#else 
+    std::vector<std::string> patterns = {".so"};
+#endif
+
+    auto pathList = Dir::scan(directory, patterns);
+    if(pathList.empty()) {
+        return {};
+    }
+
+    for(const auto& path : pathList) {
+        auto loader = PluginLoader::gen(path);
+        if(!loader || (!loader->isLoaded() && !loader->load())) {
+            continue;
+        }
+
+        auto ins = loader->instantiate(module);
+        if(!ins || !ins->query<T>()) {
+            continue;
+        }
+
+        auto plugin = std::static_pointer_cast<T>(ins);
+        if(plugin) {
+            setter(plugin.get());
+        }
+
+        return plugin;
+    }
+
+    return {};
+}
 }
