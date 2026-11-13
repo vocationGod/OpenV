@@ -20,9 +20,9 @@ class OPENV_API Image final
     OPENV_DECLARE_PRIVATE(Image)
     OPENV_DISABLE_COPY(Image)
 public:
-    static std::shared_ptr<ov::Image> gen(int width, int height, Layout layout, long timestamp = {}, std::function<void(void*)> cleaner = {}, void* opaque = {});
-    static std::shared_ptr<ov::Image> gen(std::byte* bits, int width, int height, Layout layout, int bytesPerLine, int sizeInBytes, long timestamp = {}, std::function<void(void*)> cleaner = {}, void* opaque = {});
-    static std::shared_ptr<ov::Image> gen(std::byte* bits, int handle, int width, int height, Layout layout, int bytesPerLine, int sizeInBytes, long timestamp = {}, std::function<void(void*)> cleaner = {}, void* opaque = {});
+    static std::shared_ptr<ov::Image> gen(int width, int height, Layout layout, int64_t timestamp = {}, std::function<void(void*)> cleaner = {}, void* opaque = {});
+    static std::shared_ptr<ov::Image> gen(std::byte* bits, int width, int height, Layout layout, int bytesPerLine, size_t sizeInBytes, int64_t timestamp = {}, std::function<void(void*)> cleaner = {}, void* opaque = {});
+    static std::shared_ptr<ov::Image> gen(std::byte* bits, int handle, int width, int height, Layout layout, int bytesPerLine, size_t sizeInBytes, int64_t timestamp = {}, std::function<void(void*)> cleaner = {}, void* opaque = {});
 
 public:
     ~Image();
@@ -36,9 +36,9 @@ public:
 
     bool empty() const;
 
-    long timestamp() const;
+    int64_t timestamp() const;
 
-    int sizeInBytes() const;
+    size_t sizeInBytes() const;
 
     int bytesPerLine() const;
 
@@ -49,7 +49,7 @@ public:
     std::optional<int> handle() const;
 
 protected:
-    explicit Image(std::byte* bits, int handle, int width, int height, Layout layout, int bytesPerLine, int sizeInBytes, long timestamp, std::function<void(void*)> cleaner, void* opaque);
+    explicit Image(std::byte* bits, int handle, int width, int height, Layout layout, int bytesPerLine, size_t sizeInBytes, int64_t timestamp, std::function<void(void*)> cleaner, void* opaque);
 
 private:
     std::unique_ptr<ImagePrivate> dptr;

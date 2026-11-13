@@ -1,4 +1,5 @@
 #include "ovBrush.h"
+#include "ovBrush.h"
 
 ov::Brush::Brush(BrushStyle style) : Brush(ov::black, style)
 {
@@ -37,4 +38,14 @@ bool ov::Brush::operator==(const Brush &rhs) const
 bool ov::Brush::operator!=(const Brush &rhs) const
 {
     return !(*this == rhs);
+}
+
+bool ov::Brush::operator==(BrushStyle style) const
+{
+    return (brushStyle == style);
+}
+
+bool ov::Brush::operator!=(BrushStyle style) const
+{
+    return !(*this == style);
 }

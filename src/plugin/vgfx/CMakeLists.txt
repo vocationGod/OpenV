@@ -22,6 +22,8 @@ target_include_directories(vgfx
 
 target_link_libraries(vgfx PRIVATE OpenV::base OpenV::core)
 
+target_compile_definitions(vgfx PUBLIC HAVE_OPENV_PLUGIN_VGFX)
+
 set_target_properties(vgfx PROPERTIES
     OUTPUT_NAME "openv_vgfx"
 )

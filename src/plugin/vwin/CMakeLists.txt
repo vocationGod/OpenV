@@ -18,6 +18,8 @@ target_include_directories(vwin
 
 target_link_libraries(vwin PRIVATE OpenV::base OpenV::core)
 
+target_compile_definitions(vwin PUBLIC HAVE_OPENV_PLUGIN_VWIN)
+
 set_target_properties(vwin PROPERTIES
     OUTPUT_NAME "openv_vwin"
 )

@@ -18,6 +18,8 @@ target_include_directories(vmux
 
 target_link_libraries(vmux PRIVATE OpenV::base OpenV::core)
 
+target_compile_definitions(vmux PUBLIC HAVE_OPENV_PLUGIN_VMUX)
+
 set_target_properties(vmux PROPERTIES
     OUTPUT_NAME "openv_vmux"
 )

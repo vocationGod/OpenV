@@ -12,8 +12,8 @@ namespace ov {
 class OPENV_API Freezer
 {
 public:
-    virtual bool isFreezed() const = 0;
-    virtual bool setFreezen(bool freeze) = 0;
+    virtual bool isFrozen() const = 0;
+    virtual bool setFrozen(bool freeze) = 0;
 };
 
 OPENV_DECLARE_INTERFACE(Freezer, "ov.iid.vcam.freezer")

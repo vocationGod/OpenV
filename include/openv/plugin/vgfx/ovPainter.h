@@ -22,7 +22,7 @@ public:
     };
     using RenderHints = Flags<RenderHint>;
 
-    struct PaintState { RenderHints renderHints; Brush brush; Font font; Pen pen; std::array<double, 6> transform; };
+    struct PaintState { RenderHints renderHints; Brush brush; Font font; Pen pen; std::array<double, 6> transform = {}; };
 public:
     static std::shared_ptr<ov::Painter> gen(const std::string& dir = "./plugins");
 
@@ -63,7 +63,7 @@ public:
     virtual void closeSubPath() = 0;
 
     virtual void drawText(double x, double y, const std::string& text) = 0;
-    virtual void drawText(double x, double y, double w, double h, int flags, const std::string& text) = 0;
+    virtual void drawText(double x, double y, double w, double h, Alignments flags, const std::string& text) = 0;
 
     virtual void stroke() = 0;
     virtual void fill() = 0;

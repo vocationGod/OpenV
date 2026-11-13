@@ -13,29 +13,35 @@ private:
     std::unique_ptr<Library> library;
 };
 
-static std::mutex mutex;
-static std::unordered_map<std::string, std::weak_ptr<ov::PluginLoader>> cache;
+static std::mutex ovMutex;
+static std::unordered_map<std::string, std::weak_ptr<ov::PluginLoader>> ovCache;
 std::shared_ptr<ov::PluginLoader> ov::PluginLoader::gen(const std::string &name)
 {
     if(name.empty()) {
         return {};
     }
 
-    std::lock_guard<std::mutex> locker(mutex);
-    if(auto iter = cache.find(name); iter != cache.end()) {
-        if(auto loader = iter->second.lock()) {
-            return loader;
+    {
+        std::lock_guard<std::mutex> locker(ovMutex);
+        if(auto iter = ovCache.find(name); iter != ovCache.end()) {
+            if(auto loader = iter->second.lock()) {
+                return loader;
+            }
+
+            ovCache.erase(iter);
         }
-
-        cache.erase(iter);
     }
-
+    
     auto loader = std::shared_ptr<PluginLoader>(new PluginLoader(std::make_unique<PluginLoaderPrivate>(name)));
     if(!loader->load()) {
         return {};
     }
 
-    cache[name] = loader;
+    {
+        std::lock_guard<std::mutex> locker(ovMutex);
+        ovCache[name] = loader;
+    }
+    
     return loader;
 }
 

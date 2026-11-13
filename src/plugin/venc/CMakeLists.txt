@@ -18,6 +18,8 @@ target_include_directories(venc
 
 target_link_libraries(venc PRIVATE OpenV::base OpenV::core)
 
+target_compile_definitions(venc PUBLIC HAVE_OPENV_PLUGIN_VENC)
+
 set_target_properties(venc PROPERTIES
     OUTPUT_NAME "openv_venc"
 )

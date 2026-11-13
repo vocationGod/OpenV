@@ -39,8 +39,9 @@ std::vector<std::string> ov::Dir::scan(const std::string &dir, const std::vector
 
         if(!recurse) {
             iter.disable_recursion_pending();
-
-        }else if(isReg) {
+        }
+        
+        if(isReg) {
             auto name = entry.path().filename().string();
             for(auto& ch : name) {
                 ch = static_cast<char>(std::tolower(static_cast<unsigned char>(ch)));

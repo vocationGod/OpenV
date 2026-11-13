@@ -17,10 +17,6 @@ target_include_directories(base
         $<INSTALL_INTERFACE:include>
 )
 
-if(WIN32)
-    target_link_libraries(base PRIVATE ws2_32)
-endif()
-
 set_target_properties(base PROPERTIES
     OUTPUT_NAME "openv_base"
 )

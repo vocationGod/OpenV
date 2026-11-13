@@ -12,7 +12,7 @@ const char *ov::Environment::value(const char *key)
 
 bool ov::Environment::setValue(const char *key, const char *var)
 {
-    if(!key) {
+    if(!key || !var) {
         return false;
     }
 

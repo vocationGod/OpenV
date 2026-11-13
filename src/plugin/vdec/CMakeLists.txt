@@ -18,6 +18,8 @@ target_include_directories(vdec
 
 target_link_libraries(vdec PRIVATE OpenV::base OpenV::core)
 
+target_compile_definitions(vdec PUBLIC HAVE_OPENV_PLUGIN_VDEC)
+
 set_target_properties(vdec PROPERTIES
     OUTPUT_NAME "openv_vdec"
 )

@@ -1,17 +1,15 @@
 #include "ovPen.h"
 #include <algorithm>
+#include "ovPen.h"
 
 ov::Pen::Pen(PenStyle style) : Pen(ov::black, 2, style)
 {
 }
 
-ov::Pen::Pen(const Color &color)  : Pen(color, 2)
-{
-}
-
 ov::Pen::Pen(const Color &color, double width, PenStyle style, PenCapStyle cap, PenJoinStyle join)
-    : chroma(color), thick(width), penStyle(style), penCap(cap), penJoin(join)
+    : chroma(color), penStyle(style), penCap(cap), penJoin(join)
 {
+    setWidth(width);
 }
 
 const ov::Color& ov::Pen::color() const
@@ -72,4 +70,14 @@ bool ov::Pen::operator==(const Pen &rhs) const
 bool ov::Pen::operator!=(const Pen &rhs) const
 {
     return !(*this == rhs);
+}
+
+bool ov::Pen::operator==(PenStyle style) const
+{
+    return (penStyle == style);
+}
+
+bool ov::Pen::operator!=(PenStyle style) const
+{
+    return !(*this == style);
 }

@@ -39,7 +39,7 @@ int ov::Color::red() const
 
 void ov::Color::setRed(int red)
 {
-    r = std::clamp(0, red, 255);
+    r = std::clamp(red, 0, 255);
 }
 
 int ov::Color::green() const
@@ -49,7 +49,7 @@ int ov::Color::green() const
 
 void ov::Color::setGreen(int green)
 {
-    g = std::clamp(0, green, 255);
+    g = std::clamp(green, 0, 255);
 }
 
 int ov::Color::blue() const
@@ -59,7 +59,7 @@ int ov::Color::blue() const
 
 void ov::Color::setBlue(int blue)
 {
-    b = std::clamp(0, blue, 255);
+    b = std::clamp(blue, 0, 255);
 }
 
 int ov::Color::alpha() const
@@ -69,7 +69,7 @@ int ov::Color::alpha() const
 
 void ov::Color::setAlpha(int alpha)
 {
-    a = std::clamp(0, alpha, 255);
+    a = std::clamp(alpha, 0, 255);
 }
 
 float ov::Color::redF() const
@@ -79,7 +79,7 @@ float ov::Color::redF() const
 
 void ov::Color::setRedF(float red)
 {
-    r = std::clamp(0.0f, red, 1.0f) * 255;
+    r = std::clamp(red, 0.0f, 1.0f) * 255;
 }
 
 float ov::Color::greenF() const
@@ -89,7 +89,7 @@ float ov::Color::greenF() const
 
 void ov::Color::setGreenF(float green)
 {
-    g = std::clamp(0.0f, green, 1.0f) * 255;
+    g = std::clamp(green, 0.0f, 1.0f) * 255;
 }
 
 float ov::Color::blueF() const
@@ -99,7 +99,7 @@ float ov::Color::blueF() const
 
 void ov::Color::setBlueF(float blue)
 {
-    b = std::clamp(0.0f, blue, 1.0f) * 255;
+    b = std::clamp(blue, 0.0f, 1.0f) * 255;
 }
 
 float ov::Color::alphaF() const
@@ -109,7 +109,7 @@ float ov::Color::alphaF() const
 
 void ov::Color::setAlphaF(float alpha)
 {
-    a = std::clamp(0.0f, alpha, 1.0f) * 255;
+    a = std::clamp(alpha, 0.0f, 1.0f) * 255;
 }
 
 bool ov::Color::operator==(const Color &rhs) const

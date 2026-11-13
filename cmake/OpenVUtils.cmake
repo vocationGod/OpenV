@@ -1,5 +1,5 @@
 function(openv_extract_version)
-    file(READ "include/openv/openv.h" file_contents)
+    file(READ "${CMAKE_CURRENT_LIST_DIR}/include/openv/openv.h" file_contents)
     string(REGEX MATCH "OPENV_VERSION_MAJOR ([0-9]+)" _ "${file_contents}")
     if(NOT CMAKE_MATCH_COUNT EQUAL 1)
         message(FATAL_ERROR "Could not extract major version number from openv/openv.h")

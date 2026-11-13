@@ -13,7 +13,7 @@ public:
     explicit SyncerPrivate(const std::shared_ptr<Image> &image) : image(image) {}
 
 private:
-    std::weak_ptr<Image> image;
+    std::shared_ptr<Image> image;
 };
 
 ov::Syncer::Syncer(const std::shared_ptr<Image> &image): dptr(std::make_unique<SyncerPrivate>(image))
@@ -24,18 +24,17 @@ ov::Syncer::~Syncer()
 {
 }
 
-bool ov::Syncer::sync() const
+bool ov::Syncer::sync()
 {
     OPENV_D(const Syncer);
     
 #ifndef _WIN32
-    auto image = d->image.lock();
-    if(!image || image->empty() || !image->handle()) {
+    if(!d->image || d->image->empty() || !d->image->handle()) {
         return false;
     }
 
     struct dma_buf_sync sync = {};
-    auto fd = image->handle().value();
+    auto fd = d->image->handle().value();
     
     sync.flags = DMA_BUF_SYNC_START | DMA_BUF_SYNC_WRITE;
     if(ioctl(fd, DMA_BUF_IOCTL_SYNC, &sync) < 0) {

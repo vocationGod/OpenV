@@ -1,6 +1,6 @@
 #include "ovFont.h"
 
-ov::Font::Font()
+ov::Font::Font() : Font("")
 {
 }
 

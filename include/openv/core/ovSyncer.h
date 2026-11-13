@@ -21,7 +21,7 @@ public:
     ~Syncer();
 
 public:
-    bool sync() const;
+    bool sync();
 
 private:
     std::unique_ptr<SyncerPrivate> dptr;

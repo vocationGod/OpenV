@@ -6,8 +6,7 @@ class OPENV_API Pen final
 {
 public:
     Pen(PenStyle style = NoPen);
-    Pen(const Color &color);
-    Pen(const Color &color, double width, PenStyle style = SolidLine, PenCapStyle cap = SquareCap, PenJoinStyle join = BevelJoin);
+    Pen(const Color &color, double width = 2, PenStyle style = SolidLine, PenCapStyle cap = SquareCap, PenJoinStyle join = BevelJoin);
 
 public:
     const ov::Color& color() const;
@@ -28,6 +27,8 @@ public:
     bool operator==(const Pen& rhs) const;
     bool operator!=(const Pen& rhs) const;
 
+    bool operator==(PenStyle style) const;
+    bool operator!=(PenStyle style) const;
 private:
     Color chroma;
     double thick;

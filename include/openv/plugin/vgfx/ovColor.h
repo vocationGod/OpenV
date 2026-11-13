@@ -1,4 +1,5 @@
 #pragma once
+#include "openv/plugin/vgfx/ovGfx.h"
 #include "openv/openv.h"
 #include <cstdint>
 namespace ov {
@@ -10,7 +11,7 @@ public:
     static ov::Color fromRGBF(float r, float g, float b, float a = 1.0f);
 
 public:
-    Color(GlobalColor color);
+    Color(GlobalColor color = ov::black);
     Color(int r, int g, int b, int a = 255);
     Color(float r, float g, float b, float a = 1.0f);
 

@@ -164,7 +164,7 @@ void ov::Painter::scale(double sx, double sy)
 void ov::Painter::translate(double dx, double dy)
 {
     OPENV_D(Painter);
-    d->state.transform = { 1, 0, dx, 0, 1, dy };
+    d->state.transform = { 1, 0, dx + d->state.transform[2], 0, 1, dy + d->state.transform[5] };
     updatePaintState(d->state);
 }
 

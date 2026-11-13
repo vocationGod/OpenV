@@ -25,9 +25,9 @@ private:
 
     Layout layout;
 
-    long timestamp;
+    int64_t timestamp;
 
-    int sizeInBytes;
+    size_t sizeInBytes;
 
     std::byte* bits;
 
@@ -38,17 +38,17 @@ private:
     std::function<void(void*)> cleaner;
 };
 
-std::shared_ptr<ov::Image> ov::Image::gen(int width, int height, Layout layout, long timestamp, std::function<void(void *)> cleaner, void *opaque)
+std::shared_ptr<ov::Image> ov::Image::gen(int width, int height, Layout layout, int64_t timestamp, std::function<void(void *)> cleaner, void *opaque)
 {
     return std::shared_ptr<Image>(new Image(nullptr, 0, width, height, layout, 0, 0, timestamp, cleaner, opaque));
 }
 
-std::shared_ptr<ov::Image> ov::Image::gen(std::byte *bits, int width, int height, Layout layout, int bytesPerLine, int sizeInBytes, long timestamp, std::function<void(void *)> cleaner, void *opaque)
+std::shared_ptr<ov::Image> ov::Image::gen(std::byte *bits, int width, int height, Layout layout, int bytesPerLine, size_t sizeInBytes, int64_t timestamp, std::function<void(void *)> cleaner, void *opaque)
 {
     return std::shared_ptr<Image>(new Image(bits, 0, width, height, layout, bytesPerLine, sizeInBytes, timestamp, cleaner, opaque));
 }
 
-std::shared_ptr<ov::Image> ov::Image::gen(std::byte *bits, int handle, int width, int height, Layout layout, int bytesPerLine, int sizeInBytes, long timestamp, std::function<void(void *)> cleaner, void *opaque)
+std::shared_ptr<ov::Image> ov::Image::gen(std::byte *bits, int handle, int width, int height, Layout layout, int bytesPerLine, size_t sizeInBytes, int64_t timestamp, std::function<void(void *)> cleaner, void *opaque)
 {
     return std::shared_ptr<Image>(new Image(bits, handle, width, height, layout, bytesPerLine, sizeInBytes, timestamp, cleaner, opaque));
 }
@@ -107,13 +107,13 @@ bool ov::Image::empty() const
     return (d->bits == nullptr) || (d->width <= 0) || (d->height <= 0) || (d->bytesPerLine <= 0) || (d->sizeInBytes <= 0) || (d->layout == Layout::NONE);
 }
 
-long ov::Image::timestamp() const
+int64_t ov::Image::timestamp() const
 {
     OPENV_D(const Image);
     return d->timestamp;
 }
 
-int ov::Image::sizeInBytes() const
+size_t ov::Image::sizeInBytes() const
 {
     OPENV_D(const Image);
     return d->sizeInBytes;
@@ -125,16 +125,16 @@ int ov::Image::bytesPerLine() const
     return d->bytesPerLine;
 }
 
-ov::Image::Image(std::byte *bits, int handle, int width, int height, Layout layout, int bytesPerLine, int sizeInBytes, long timestamp, std::function<void(void *)> cleaner, void *opaque)
+ov::Image::Image(std::byte *bits, int handle, int width, int height, Layout layout, int bytesPerLine, size_t sizeInBytes, int64_t timestamp, std::function<void(void *)> cleaner, void *opaque)
     : dptr(std::make_unique<ImagePrivate>(bits, handle, width, height, layout, bytesPerLine, sizeInBytes, timestamp, cleaner, opaque))
 {
     OPENV_D(Image);
     if((d->bits == nullptr) && (d->handle <= 0) && (d->width > 0) && (d->height > 0) && (d->layout != Layout::NONE)) {
-        int bits  = 0;
+        int count = 0;
         int depth = 0;
 
         switch(d->layout) {
-        #define CREATE_ENUM(a, b, c)    case ov::Layout::a : bits = c; break;
+        #define CREATE_ENUM(a, b, c)    case ov::Layout::a : count = c; break;
             OPENV_DECLARE_LAYOUT_TOKENS(CREATE_ENUM)
         #undef  CREATE_ENUM
         }
@@ -146,7 +146,7 @@ ov::Image::Image(std::byte *bits, int handle, int width, int height, Layout layo
         }
 
         int stride  = depth * OPENV_ALIGN(width, 64) / 8;
-        int length  = bits * OPENV_ALIGN(width, 64) * OPENV_ALIGN(height, 64) / 8;
+        int length  = count * OPENV_ALIGN(width, 64) * OPENV_ALIGN(height, 64) / 8;
         if(stride <= 0 || length <= 0) {
             return;
         }
@@ -202,11 +202,18 @@ ov::Image::Image(std::byte *bits, int handle, int width, int height, Layout layo
             close(fd);
         }
 #endif
+        try {
+            d->bits    = new std::byte[length];
+            d->cleaner = [this](void*) { delete [] d_func()->bits; };
 
-        d->bits    = new std::byte[length];
-        d->cleaner = [this](void*) { delete [] d_func()->bits; };
+            d->sizeInBytes  = length;
+            d->bytesPerLine = stride;
+        } catch(...) {
+            d->bits         = nullptr;
+            d->cleaner      = {};
 
-        d->sizeInBytes  = length;
-        d->bytesPerLine = stride;
+            d->sizeInBytes  = 0;
+            d->bytesPerLine = 0;
+        }
     }
 }

@@ -33,8 +33,8 @@ public:
     };
 
 public:
-    static std::shared_ptr<ov::Fragment> gen(int sizeInBytes, Media media = Media::NONE, Type type = Fragment::NONE, long timestamp = {}, std::function<void(void*)> cleaner = {}, void* opaque = {});
-    static std::shared_ptr<ov::Fragment> gen(std::byte* bits, int sizeInBytes, Media media = Media::NONE, Type type = Fragment::NONE, long timestamp = {}, std::function<void(void*)> cleaner = {}, void* opaque = {});
+    static std::shared_ptr<ov::Fragment> gen(size_t sizeInBytes, Media media = Media::NONE, Type type = Fragment::NONE, int64_t timestamp = {}, std::function<void(void*)> cleaner = {}, void* opaque = {});
+    static std::shared_ptr<ov::Fragment> gen(std::byte* bits, size_t sizeInBytes, Media media = Media::NONE, Type type = Fragment::NONE, int64_t timestamp = {}, std::function<void(void*)> cleaner = {}, void* opaque = {});
 
 public:
     ~Fragment();
@@ -44,9 +44,9 @@ public:
 
     bool empty() const;
 
-    long timestamp() const;
+    int64_t timestamp() const;
 
-    int sizeInBytes() const;
+    size_t sizeInBytes() const;
 
     ov::Media media() const;
 
@@ -55,7 +55,7 @@ public:
     ov::Fragment::Type type() const;
 
 protected:
-    explicit Fragment(std::byte* bits, int sizeInBytes, Media media, Type type, long timestamp, std::function<void(void*)> cleaner, void* opaque);
+    explicit Fragment(std::byte* bits, size_t sizeInBytes, Media media, Type type, int64_t timestamp, std::function<void(void*)> cleaner, void* opaque);
 
 private:
     std::unique_ptr<FragmentPrivate> dptr;

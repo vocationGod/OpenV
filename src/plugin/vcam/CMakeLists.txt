@@ -18,6 +18,8 @@ target_include_directories(vcam
 
 target_link_libraries(vcam PRIVATE OpenV::base OpenV::core)
 
+target_compile_definitions(vcam PUBLIC HAVE_OPENV_PLUGIN_VCAM)
+
 set_target_properties(vcam PROPERTIES
     OUTPUT_NAME "openv_vcam"
 )

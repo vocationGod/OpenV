@@ -18,6 +18,9 @@ public:
     bool operator==(const Brush& rhs) const;
     bool operator!=(const Brush& rhs) const;
 
+    bool operator==(BrushStyle style) const;
+    bool operator!=(BrushStyle style) const;
+
 private:
     Color chroma;
     BrushStyle brushStyle;

@@ -18,6 +18,8 @@ target_include_directories(vpss
 
 target_link_libraries(vpss PRIVATE OpenV::base OpenV::core)
 
+target_compile_definitions(vpss PUBLIC HAVE_OPENV_PLUGIN_VPSS)
+
 set_target_properties(vpss PROPERTIES
     OUTPUT_NAME "openv_vpss"
 )

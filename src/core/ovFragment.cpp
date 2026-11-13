@@ -4,15 +4,15 @@ class ov::FragmentPrivate
 {
     OPENV_DECLARE_PUBLIC(Fragment)
 public:
-    explicit FragmentPrivate(std::byte *bits, int sizeInBytes, Media media, Fragment::Type type, long timestamp, std::function<void(void *)> cleaner, void *opaque)
+    explicit FragmentPrivate(std::byte *bits, size_t sizeInBytes, Media media, Fragment::Type type, int64_t timestamp, std::function<void(void *)> cleaner, void *opaque)
         : bits(bits), sizeInBytes(sizeInBytes), media(media), type(type), timestamp(timestamp), cleaner(cleaner), opaque(opaque) {}
 
 private:
     Media media;
 
-    long timestamp;
+    int64_t timestamp;
 
-    int sizeInBytes;
+    size_t sizeInBytes;
 
     std::byte* bits;
 
@@ -23,12 +23,12 @@ private:
     std::function<void(void*)> cleaner;
 };
 
-std::shared_ptr<ov::Fragment> ov::Fragment::gen(int sizeInBytes, Media media, Type type, long timestamp, std::function<void(void *)> cleaner, void *opaque)
+std::shared_ptr<ov::Fragment> ov::Fragment::gen(size_t sizeInBytes, Media media, Type type, int64_t timestamp, std::function<void(void *)> cleaner, void *opaque)
 {
     return std::shared_ptr<ov::Fragment>(new Fragment(nullptr, sizeInBytes, media, type, timestamp, cleaner, opaque));
 }
 
-std::shared_ptr<ov::Fragment> ov::Fragment::gen(std::byte *bits, int sizeInBytes, Media media, Type type, long timestamp, std::function<void(void *)> cleaner, void *opaque)
+std::shared_ptr<ov::Fragment> ov::Fragment::gen(std::byte *bits, size_t sizeInBytes, Media media, Type type, int64_t timestamp, std::function<void(void *)> cleaner, void *opaque)
 {
     return std::shared_ptr<ov::Fragment>(new Fragment(bits, sizeInBytes, media, type, timestamp, cleaner, opaque));
 }
@@ -71,24 +71,30 @@ bool ov::Fragment::empty() const
     return (d->bits == nullptr) || (d->sizeInBytes <= 0);
 }
 
-long ov::Fragment::timestamp() const
+int64_t ov::Fragment::timestamp() const
 {
     OPENV_D(const Fragment);
     return d->timestamp;
 }
 
-int ov::Fragment::sizeInBytes() const
+size_t ov::Fragment::sizeInBytes() const
 {
     OPENV_D(const Fragment);
     return d->sizeInBytes;
 }
 
-ov::Fragment::Fragment(std::byte *bits, int sizeInBytes, Media media, Type type, long timestamp, std::function<void(void *)> cleaner, void *opaque)
+ov::Fragment::Fragment(std::byte *bits, size_t sizeInBytes, Media media, Type type, int64_t timestamp, std::function<void(void *)> cleaner, void *opaque)
     : dptr(std::make_unique<FragmentPrivate>(bits, sizeInBytes, media, type, timestamp, cleaner, opaque))
 {    
     OPENV_D(Fragment);
     if((d->bits == nullptr) && (d->sizeInBytes > 0)) {
-        d->bits     = new std::byte[d->sizeInBytes];
-        d->cleaner  = [this](void*) { delete [] d_func()->bits; };
+        try {
+            d->bits     = new std::byte[d->sizeInBytes];
+            d->cleaner  = [this](void*) { delete [] d_func()->bits; };
+        } catch(...) {
+            d->bits         = nullptr;
+            d->cleaner      = {};
+            d->sizeInBytes = 0;
+        }  
     }
 }

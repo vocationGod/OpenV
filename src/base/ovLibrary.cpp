@@ -1,5 +1,5 @@
 #include "ovLibrary.h"
-
+#include <cstdio>
 #ifdef _WIN32
     #define WIN32_LEAN_AND_MEAN
     #include <windows.h>
@@ -33,9 +33,10 @@ static ov::FunctionPointer openv_module_symbol(openv_module_t module, const char
 {
 #ifdef _WIN32
     ::SetLastError(0); 
-    return reinterpret_cast<ov::FunctionPointer>(reinterpret_cast<void*>(::GetProcAddress(module, symbol)));
+    return ::GetProcAddress(module, symbol);
 #else
-    return reinterpret_cast<ov::FunctionPointer>(::dlsym(module, symbol));
+    ::dlerror();
+    return ::dlsym(module, symbol);
 #endif      
 }
 
@@ -123,7 +124,7 @@ bool ov::Library::unload()
         return true;
     }
 
-    if(openv_module_unload(d->modlue)) {
+    if(!openv_module_unload(d->modlue)) {
         auto err = openv_module_errstr();
         d->errorString = d->name + " " + (err ? err : "library close error");
         return false;
