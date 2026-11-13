@@ -1,5 +1,6 @@
 #include "ovDir.h"
 #include <filesystem>
+#include <algorithm>
 
 std::vector<std::string> ov::Dir::scan(const std::string &dir, const std::vector<std::string> &patterns, bool recurse)
 {
@@ -60,6 +61,8 @@ std::vector<std::string> ov::Dir::scan(const std::string &dir, const std::vector
             error = {};
         }
     }
+
+    std::sort(pathList.begin(), pathList.end());
 
     return pathList;
 }

@@ -42,7 +42,13 @@ std::shared_ptr<ov::Processor> ov::Processor::gen(Ports ports, int width, int he
         return {};
     }
 
-    auto pathList = Dir::scan(directory, {".so", ".dll"});
+#ifdef _WIN32
+    std::vector<std::string> patterns = {".dll"};
+#else 
+    std::vector<std::string> patterns = {".so"};
+#endif
+
+    auto pathList = Dir::scan(directory, patterns);
     if(pathList.empty()) {
         return {};
     }

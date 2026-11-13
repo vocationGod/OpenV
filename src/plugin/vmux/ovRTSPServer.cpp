@@ -49,7 +49,13 @@ std::shared_ptr<ov::RTSPServer> ov::RTSPServer::gen(const std::vector<Session> &
         return {};
     }
 
-    auto pathList = Dir::scan(directory, {".so", ".dll"});
+#ifdef _WIN32
+    std::vector<std::string> patterns = {".dll"};
+#else 
+    std::vector<std::string> patterns = {".so"};
+#endif
+
+    auto pathList = Dir::scan(directory, patterns);
     if(pathList.empty()) {
         return {};
     }

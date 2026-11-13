@@ -42,7 +42,13 @@ std::shared_ptr<ov::Camera> ov::Camera::gen(const std::string &name, int width, 
         return {};
     }
 
-    auto pathList = Dir::scan(directory, {".so", ".dll"});
+#ifdef _WIN32
+    std::vector<std::string> patterns = {".dll"};
+#else 
+    std::vector<std::string> patterns = {".so"};
+#endif
+
+    auto pathList = Dir::scan(directory, patterns);
     if(pathList.empty()) {
         return {};
     }

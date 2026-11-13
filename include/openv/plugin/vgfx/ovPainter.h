@@ -35,7 +35,7 @@ public:
     };
     using RenderHints = Flags<RenderHint>;
 
-    struct PaintState { RenderHints renderHints; Brush brush; Font font; Pen pen; double transform[6]; };
+    struct PaintState { RenderHints renderHints; Brush brush; Font font; Pen pen; double transform[6] = {1, 0, 0, 0, 1, 0}; };
 public:
     static std::shared_ptr<ov::Painter> gen(const std::string& dir = "./plugins");
 

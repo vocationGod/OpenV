@@ -13,7 +13,7 @@ class ov::ImagePrivate
 {
     OPENV_DECLARE_PUBLIC(Image)
 public:
-    explicit ImagePrivate(std::byte *bits, int handle, int width, int height, Layout layout, int bytesPerLine, int sizeInBytes, long timestamp, std::function<void(void *)> cleaner, void *opaque)
+    explicit ImagePrivate(std::byte *bits, int handle, int width, int height, Layout layout, int bytesPerLine, size_t sizeInBytes, int64_t timestamp, std::function<void(void *)> cleaner, void *opaque)
         : bits(bits), handle(handle), width(width), height(height), layout(layout), bytesPerLine(bytesPerLine), sizeInBytes(sizeInBytes), timestamp(timestamp), cleaner(cleaner), opaque(opaque) {}
 
 private:

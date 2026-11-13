@@ -39,10 +39,11 @@ if(MSVC)
     add_compile_options(/utf-8)
 endif()
 
-if(NOT BUILD_SHARED_LIBS) 
-    set(BUILD_SHARED_LIBS ON)
-    message(WARNING "must be shared library")
+if(DEFINED BUILD_SHARED_LIBS AND NOT BUILD_SHARED_LIBS)
+    message(FATAL_ERROR "OpenV must be shared library")
 endif()
+
+set(BUILD_SHARED_LIBS ON)
 
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)

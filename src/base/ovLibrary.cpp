@@ -33,7 +33,7 @@ static ov::FunctionPointer openv_module_symbol(openv_module_t module, const char
 {
 #ifdef _WIN32
     ::SetLastError(0); 
-    return reinterpret_cast<void*>(::GetProcAddress(module, symbol))
+    return reinterpret_cast<void*>(::GetProcAddress(module, symbol));
 #else
     ::dlerror();
     return ::dlsym(module, symbol);

@@ -29,7 +29,13 @@ std::shared_ptr<ov::Painter> ov::Painter::gen(const std::string &dir)
         return {};
     }
 
-    auto pathList = Dir::scan(directory, {".so", ".dll"});
+#ifdef _WIN32
+    std::vector<std::string> patterns = {".dll"};
+#else 
+    std::vector<std::string> patterns = {".so"};
+#endif
+
+    auto pathList = Dir::scan(directory, patterns);
     if(pathList.empty()) {
         return {};
     }
@@ -252,8 +258,6 @@ void ov::Painter::drawEllipse(double x, double y, double w, double h)
 
 ov::Painter::Painter() : dptr(std::make_unique<PainterPrivate>())
 {
-    OPENV_D(Painter);
-    memset(d->state.transform, 0, sizeof(d->state.transform));
 }
 
 

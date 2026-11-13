@@ -43,7 +43,13 @@ std::shared_ptr<ov::Encoder> ov::Encoder::gen(int width, int height, Layout layo
         return {};
     }
 
-    auto pathList = Dir::scan(directory, {".so", ".dll"});
+#ifdef _WIN32
+    std::vector<std::string> patterns = {".dll"};
+#else 
+    std::vector<std::string> patterns = {".so"};
+#endif
+
+    auto pathList = Dir::scan(directory, patterns);
     if(pathList.empty()) {
         return {};
     }
