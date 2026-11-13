@@ -1,11 +1,10 @@
 #include "ovCamera.h"
-#include "ovElement_p.h"
 #include "ovEnvironment.h"
 #include "ovPluginLoader.h"
 #include "ovImage.h"
 #include "ovDir.h"
 
-class ov::CameraPrivate : public ElementPrivate
+class ov::CameraPrivate
 {
     OPENV_DECLARE_PUBLIC(Camera)
 public:
@@ -105,7 +104,7 @@ ov::Layout ov::Camera::layout() const
     return d->layout;
 }
 
-std::string ov::Camera::name() const
+const std::string& ov::Camera::name() const
 {
     OPENV_D(const Camera);
     return d->name;
@@ -139,6 +138,6 @@ std::shared_ptr<ov::Image> ov::Camera::acquire(int timeout)
     return image;
 }
 
-ov::Camera::Camera() : Element(std::make_unique<CameraPrivate>("", 0, 0, Layout::NONE, 0))
+ov::Camera::Camera() : dptr(std::make_unique<CameraPrivate>("", 0, 0, Layout::NONE, 0))
 {
 }

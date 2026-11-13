@@ -10,7 +10,7 @@ public:
     Font(const std::string&family, double pixelSize = 25);
 
 public:
-    std::string family() const;
+    const std::string& family() const;
     void setFamily(const std::string& family);
 
     double pixelSize() const;

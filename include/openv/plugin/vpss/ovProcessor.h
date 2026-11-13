@@ -3,6 +3,7 @@
 #include "openv/core/ovLayout.h"
 #include "openv/base/ovFlags.h"
 #include <optional>
+#include <memory>
 namespace ov {
 
 class Image;
@@ -54,6 +55,8 @@ protected:
 protected:
     explicit Processor();
 
+private:
+    std::unique_ptr<ProcessorPrivate> dptr;
 };
 
 OPENV_FLAGS_ENABLE_OPERATORS(ov::Processor::Port)

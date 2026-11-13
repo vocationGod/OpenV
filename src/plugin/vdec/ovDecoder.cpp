@@ -1,12 +1,11 @@
 #include "ovDecoder.h"
-#include "ovElement_p.h"
 #include "ovEnvironment.h"
 #include "ovPluginLoader.h"
 #include "ovFragment.h"
 #include "ovImage.h"
 #include "ovDir.h"
 
-class ov::DecoderPrivate : public ElementPrivate
+class ov::DecoderPrivate
 {
     OPENV_DECLARE_PUBLIC(Decoder)
 public:
@@ -144,6 +143,6 @@ bool ov::Decoder::submit(const std::shared_ptr<ov::Fragment> &fragment, int time
     return transmit(fragment, timeout);
 }
 
-ov::Decoder::Decoder() : Element(std::make_unique<DecoderPrivate>(0, 0, Media::NONE, 0))
+ov::Decoder::Decoder() : dptr(std::make_unique<DecoderPrivate>(0, 0, Media::NONE, 0))
 {
 }

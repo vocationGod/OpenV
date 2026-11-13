@@ -1,12 +1,10 @@
 #pragma once
 #include "openv/base/ovPlugin.h"
-#include <memory>
+#include <atomic>
 namespace ov {
 
-class ElementPrivate;
 class OPENV_API Element : public Plugin
 {
-    OPENV_DECLARE_PRIVATE(Element)
     OPENV_DISABLE_COPY(Element)
 public:
     ~Element();
@@ -34,9 +32,10 @@ protected:
     virtual void shutdown() = 0;
 
 protected:
-    explicit Element(std::unique_ptr<ElementPrivate> dd);
+    explicit Element();
 
-protected:
-    std::unique_ptr<ElementPrivate> dptr;
+private:
+    enum State { CLOSED, OPENED, RUNNING };
+    std::atomic<State> state;
 };
 }

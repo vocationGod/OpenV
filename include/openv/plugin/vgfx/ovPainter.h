@@ -1,11 +1,12 @@
 #pragma once
+#include "openv/plugin/vgfx/ovBrush.h"
+#include "openv/plugin/vgfx/ovFont.h"
+#include "openv/plugin/vgfx/ovPen.h"
 #include "openv/base/ovPlugin.h"
 #include "openv/base/ovFlags.h"
-#include "openv/core/ovBrush.h"
-#include "openv/core/ovFont.h"
-#include "openv/core/ovPen.h"
 #include <memory>
 #include <string>
+#include <array>
 namespace ov {
 
 class Image;
@@ -21,6 +22,7 @@ public:
     };
     using RenderHints = Flags<RenderHint>;
 
+    struct PaintState { RenderHints renderHints; Brush brush; Font font; Pen pen; std::array<double, 6> transform; };
 public:
     static std::shared_ptr<ov::Painter> gen(const std::string& dir = "./plugins");
 
@@ -28,19 +30,16 @@ public:
     ~Painter();
 
 public:
-    ov::Pen pen() const;
+    const ov::Pen& pen() const;
     void setPen(const Pen& pen);
 
-    ov::Brush brush() const;
+    const ov::Brush& brush() const;
     void setBrush(const Brush& brush);
 
-    ov::Font font() const;
+    const ov::Font& font() const;
     void setFont(const Font& font);
 
-    double opacity() const;
-    void setOpacity(double opacity);
-
-    ov::Painter::RenderHints renderHints() const;
+    const ov::Painter::RenderHints& renderHints() const;
     void setRenderHint(const RenderHint& hint, bool on = true);
 
 public:
@@ -48,14 +47,14 @@ public:
     virtual bool end() = 0;
 
 public:
-    virtual void save() = 0;
-    virtual void restore() = 0;
+    virtual void save();
+    virtual void restore();
 
 public:
-    virtual void rotate(double angle) = 0;
-    virtual void shear(double hs, double vs) = 0;
-    virtual void scale(double sx, double sy) = 0;
-    virtual void translate(double dx, double dy) = 0;
+    virtual void rotate(double angle);
+    virtual void shear(double hs, double vs);
+    virtual void scale(double sx, double sy);
+    virtual void translate(double dx, double dy);
 
 public:
     virtual void moveTo(double x, double y) = 0;
@@ -73,6 +72,9 @@ public:
     void drawRect(double x, double y, double w, double h);
     void drawLine(double x0, double y0, double x1, double y1);
     void drawEllipse(double x, double y, double w, double h);
+
+protected:
+    virtual void updatePaintState(const PaintState& state) = 0;
 
 protected:
     explicit Painter();

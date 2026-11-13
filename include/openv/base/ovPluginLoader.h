@@ -23,9 +23,9 @@ public:
 
     bool isLoaded() const;
 
-    std::string name() const;
+    const std::string& name() const;
     
-    std::string errorString() const;
+    const std::string& errorString() const;
 
     std::shared_ptr<ov::Plugin> instantiate();
 

@@ -1,6 +1,7 @@
 #pragma once
 #include "openv/core/ovElement.h"
 #include "openv/core/ovMedia.h"
+#include <memory>
 #include <vector>
 #include <string>
 namespace ov {
@@ -25,7 +26,7 @@ public:
 
     int capacity() const;
 
-    std::vector<ov::RTSPServer::Session> sessions() const;
+    const std::vector<ov::RTSPServer::Session>& sessions() const;
 
     bool submit(const Session& session, const std::shared_ptr<ov::Fragment>& fragment, int timeout = 0);
 
@@ -34,6 +35,9 @@ protected:
 
 protected:
     explicit RTSPServer();
+
+private:
+    std::unique_ptr<RTSPServerPrivate> dptr;
 };
 
 OPENV_DECLARE_INTERFACE(RTSPServer, "ov.iid.rtspserver")

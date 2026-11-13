@@ -3,20 +3,15 @@
 #include "ovPluginLoader.h"
 #include "ovImage.h"
 #include "ovDir.h"
+#include <cmath>
 #include <stack>
 
 class ov::PainterPrivate
 {
     OPENV_DECLARE_PUBLIC(Painter)
-public:
-    PainterPrivate() : opacity(0) {}
-
 private:
-    Painter::RenderHints renderHints;
-    double opacity;
-    Brush brush;
-    Font font;
-    Pen pen;
+    std::stack<Painter::PaintState> states;
+    Painter::PaintState state;
 };
 
 std::shared_ptr<ov::Painter> ov::Painter::gen(const std::string &dir)
@@ -64,75 +59,120 @@ ov::Painter::~Painter()
 {
 }
 
-ov::Pen ov::Painter::pen() const
+const ov::Pen& ov::Painter::pen() const
 {
     OPENV_D(const Painter);
-    return d->pen;
+    return d->state.pen;
 }
 
 void ov::Painter::setPen(const Pen &pen)
 {
     OPENV_D(Painter);
-    d->pen = pen;
+    if(d->state.pen != pen) {
+        d->state.pen = pen;
+        updatePaintState(d->state);
+    }
 }
 
-ov::Brush ov::Painter::brush() const
+const ov::Brush& ov::Painter::brush() const
 {
     OPENV_D(const Painter);
-    return d->brush;
+    return d->state.brush;
 }
 
 void ov::Painter::setBrush(const Brush &brush)
 {
     OPENV_D(Painter);
-    d->brush = brush;
+    if(d->state.brush != brush) {
+        d->state.brush = brush;
+        updatePaintState(d->state);
+    } 
 }
 
-ov::Font ov::Painter::font() const
+const ov::Font& ov::Painter::font() const
 {
     OPENV_D(const Painter);
-    return d->font;
+    return d->state.font;
 }
 
 void ov::Painter::setFont(const Font &font)
 {
     OPENV_D(Painter);
-    d->font = font;
+    if(d->state.font != font) {
+        d->state.font = font;
+        updatePaintState(d->state);
+    }
 }
 
-double ov::Painter::opacity() const
+const ov::Painter::RenderHints& ov::Painter::renderHints() const
 {
     OPENV_D(const Painter);
-    return d->opacity;
-}
-
-void ov::Painter::setOpacity(double opacity)
-{
-    OPENV_D(Painter);
-    d->opacity = opacity;
-}
-
-ov::Painter::RenderHints ov::Painter::renderHints() const
-{
-    OPENV_D(const Painter);
-    return d->renderHints;
+    return d->state.renderHints;
 }
 
 void ov::Painter::setRenderHint(const RenderHint &hint, bool on)
 {
     OPENV_D(Painter);
     if(on) {
-        d->renderHints |= hint;
+        d->state.renderHints |= hint;
     }else {
-        d->renderHints &= ~hint;
+        d->state.renderHints &= ~hint;
     }
+
+    updatePaintState(d->state);
+}
+
+void ov::Painter::save()
+{
+    OPENV_D(Painter);
+    d->states.push(d->state);
+}
+
+void ov::Painter::restore()
+{
+    OPENV_D(Painter);
+    if(!d->states.empty()) {
+        d->state = d->states.top();
+        d->states.pop();
+        updatePaintState(d->state);
+    }
+}
+
+void ov::Painter::rotate(double angle)
+{
+    OPENV_D(Painter);
+    double c = std::cos(angle);
+    double s = std::sin(angle);
+    d->state.transform = {c, -s, 0, s, c, 0};
+    updatePaintState(d->state);
+}
+
+void ov::Painter::shear(double hs, double vs)
+{
+    OPENV_D(Painter);
+    d->state.transform = {1, hs, 0, vs, 1, 0};
+    updatePaintState(d->state);
+}
+
+void ov::Painter::scale(double sx, double sy)
+{
+    OPENV_D(Painter);
+    d->state.transform = {sx, 0, 0, 0, sy, 0};
+    updatePaintState(d->state);
+}
+
+void ov::Painter::translate(double dx, double dy)
+{
+    OPENV_D(Painter);
+    d->state.transform = { 1, 0, dx, 0, 1, dy };
+    updatePaintState(d->state);
 }
 
 void ov::Painter::drawRect(double x, double y, double w, double h)
 {
     OPENV_D(Painter);
-    bool stroked = (d->pen != NoPen);
-    bool filled  = (d->brush != NoBrush);
+    bool stroked = (d->state.pen != NoPen);
+    bool filled  = (d->state.brush != NoBrush);
     if(!stroked && !filled) {
         return;
     }
@@ -155,7 +195,7 @@ void ov::Painter::drawRect(double x, double y, double w, double h)
 void ov::Painter::drawLine(double x0, double y0, double x1, double y1)
 {
     OPENV_D(Painter);
-    if(d->pen == NoPen) {
+    if(d->state.pen == NoPen) {
         return;
     }
 
@@ -167,8 +207,8 @@ void ov::Painter::drawLine(double x0, double y0, double x1, double y1)
 void ov::Painter::drawEllipse(double x, double y, double w, double h)
 {
     OPENV_D(Painter);
-    bool stroked = (d->pen != NoPen);
-    bool filled  = (d->brush != NoBrush);
+    bool stroked = (d->state.pen != NoPen);
+    bool filled  = (d->state.brush != NoBrush);
     if(!stroked && !filled) {
         return;
     }
@@ -201,3 +241,5 @@ void ov::Painter::drawEllipse(double x, double y, double w, double h)
 ov::Painter::Painter() : dptr(std::make_unique<PainterPrivate>())
 {
 }
+
+

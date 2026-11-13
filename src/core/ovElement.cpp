@@ -1,5 +1,4 @@
 #include "ovElement.h"
-#include "ovElement_p.h"
 
 ov::Element::~Element()
 {
@@ -15,8 +14,7 @@ bool ov::Element::open()
         return false;
     }
 
-    OPENV_D(Element);
-    d->state = ElementPrivate::OPENED;
+    state = OPENED;
     return true;
 }
 
@@ -34,8 +32,7 @@ bool ov::Element::start()
         return false;
     }
 
-    OPENV_D(Element);
-    d->state = ElementPrivate::RUNNING;
+    state = RUNNING;
     return true;
 }
 
@@ -46,9 +43,7 @@ void ov::Element::stop()
     }
 
     pause();
-
-    OPENV_D(Element);
-    d->state = ElementPrivate::OPENED;
+    state = OPENED;
 }
 
 void ov::Element::close()
@@ -61,22 +56,19 @@ void ov::Element::close()
         shutdown();
     }
 
-    OPENV_D(Element);
-    d->state = ElementPrivate::CLOSED;
+    state = CLOSED;
 }
 
 bool ov::Element::isOpen() const
 {
-    OPENV_D(const Element);
-    return (d->state != ElementPrivate::CLOSED);
+    return (state != CLOSED);
 }
 
 bool ov::Element::isRunning() const
 {
-    OPENV_D(const Element);
-    return (d->state == ElementPrivate::RUNNING);
+    return (state == RUNNING);
 }
 
-ov::Element::Element(std::unique_ptr<ElementPrivate> dd) : dptr(std::move(dd))
+ov::Element::Element() : state(CLOSED)
 {
 }

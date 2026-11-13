@@ -7,6 +7,7 @@
  * ***************************************************************/
 #pragma once
 #include "openv/core/ovLayout.h"
+#include "openv/openv.h"
 #include <functional>
 #include <optional>
 #include <cstddef>

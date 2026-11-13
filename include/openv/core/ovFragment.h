@@ -7,6 +7,7 @@
  * ***************************************************************/
 #pragma once
 #include "openv/core/ovMedia.h"
+#include "openv/openv.h"
 #include <functional>
 #include <cstddef>
 #include <memory>

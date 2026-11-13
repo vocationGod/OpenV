@@ -3,7 +3,7 @@
 namespace ov {
 
 template <typename E>
-class Flags
+class Flags final
 {
     static_assert(std::is_enum_v<E>, "#error Flags<>");
 public:

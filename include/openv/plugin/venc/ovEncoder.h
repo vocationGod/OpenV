@@ -9,6 +9,7 @@
 #include "openv/core/ovElement.h"
 #include "openv/core/ovLayout.h"
 #include "openv/core/ovMedia.h"
+#include <memory>
 #include <string>
 namespace ov {
 
@@ -51,6 +52,9 @@ protected:
 
 protected:
     explicit Encoder();
+
+private:
+    std::unique_ptr<EncoderPrivate> dptr;
 };
 
 OPENV_DECLARE_INTERFACE(Encoder, "ov.iid.encoder")

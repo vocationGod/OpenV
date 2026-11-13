@@ -8,6 +8,7 @@
 #pragma once
 #include "openv/core/ovElement.h"
 #include "openv/core/ovLayout.h"
+#include <memory>
 #include <string>
 namespace ov {
 
@@ -56,9 +57,9 @@ public:
 
     ov::Layout layout() const;
 
-    ov::Window::Geometry geometry() const;
-
     ov::Window::Connector connector() const;
+
+    const ov::Window::Geometry& geometry() const;
 
     bool submit(const std::shared_ptr<ov::Image>& image, int timeout = 0);
 
@@ -67,6 +68,9 @@ protected:
 
 protected:
     explicit Window();
+
+private:
+    std::unique_ptr<WindowPrivate> dptr;
 };
 
 OPENV_DECLARE_INTERFACE(Window, "ov.iid.window")

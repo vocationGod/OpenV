@@ -1,11 +1,10 @@
 #include "ovProcessor.h"
-#include "ovElement_p.h"
 #include "ovEnvironment.h"
 #include "ovPluginLoader.h"
 #include "ovImage.h"
 #include "ovDir.h"
 
-class ov::ProcessorPrivate : public ElementPrivate
+class ov::ProcessorPrivate
 {
     OPENV_DECLARE_PUBLIC(Processor)
 public:
@@ -152,6 +151,6 @@ bool ov::Processor::submit(const std::shared_ptr<ov::Image> &image, int timeout)
     return transmit(image, timeout);
 }
 
-ov::Processor::Processor() : Element(std::make_unique<ProcessorPrivate>(Ports(), 0, 0, Layout::NONE, 0))
+ov::Processor::Processor() : dptr(std::make_unique<ProcessorPrivate>(Ports(), 0, 0, Layout::NONE, 0))
 {
 }

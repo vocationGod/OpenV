@@ -9,7 +9,7 @@ ov::Brush::Brush(const Color &color, BrushStyle style)
 {
 }
 
-ov::Color ov::Brush::color() const
+const ov::Color& ov::Brush::color() const
 {
     return chroma;
 }

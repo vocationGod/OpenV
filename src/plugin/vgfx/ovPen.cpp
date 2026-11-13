@@ -14,7 +14,7 @@ ov::Pen::Pen(const Color &color, double width, PenStyle style, PenCapStyle cap, 
 {
 }
 
-ov::Color ov::Pen::color() const
+const ov::Color& ov::Pen::color() const
 {
     return chroma;
 }

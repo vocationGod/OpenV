@@ -2,6 +2,7 @@
 #include "openv/core/ovElement.h"
 #include "openv/core/ovLayout.h"
 #include <optional>
+#include <memory>
 #include <string>
 namespace ov {
 
@@ -26,7 +27,7 @@ public:
     
     ov::Layout layout() const;
     
-    std::string name() const;
+    const std::string& name() const;
 
     std::optional<int> descriptor() const;
     
@@ -39,6 +40,9 @@ protected:
 
 protected:
     explicit Camera();
+
+private: 
+    std::unique_ptr<CameraPrivate> dptr;
 };
 
 OPENV_DECLARE_INTERFACE(Camera, "ov.iid.camera")

@@ -1,11 +1,10 @@
 #include "ovWindow.h"
-#include "ovElement_p.h"
 #include "ovEnvironment.h"
 #include "ovPluginLoader.h"
 #include "ovImage.h"
 #include "ovDir.h"
 
-class ov::WindowPrivate : public ElementPrivate
+class ov::WindowPrivate
 {
     OPENV_DECLARE_PUBLIC(Window)
 public:
@@ -117,16 +116,16 @@ ov::Layout ov::Window::layout() const
     return d->layout;
 }
 
-ov::Window::Geometry ov::Window::geometry() const
-{
-    OPENV_D(const Window);
-    return d->geometry;
-}
-
 ov::Window::Connector ov::Window::connector() const
 {
     OPENV_D(const Window);
     return d->connector;
+}
+
+const ov::Window::Geometry& ov::Window::geometry() const
+{
+    OPENV_D(const Window);
+    return d->geometry;
 }
 
 bool ov::Window::submit(const std::shared_ptr<ov::Image> &image, int timeout)
@@ -142,6 +141,6 @@ bool ov::Window::submit(const std::shared_ptr<ov::Image> &image, int timeout)
     return transmit(image, timeout);
 }
 
-ov::Window::Window() : Element(std::make_unique<WindowPrivate>(Connector::NONE, Geometry{0,0,0,0}, 0, 0, Layout::NONE, 0))
+ov::Window::Window() : dptr(std::make_unique<WindowPrivate>(Connector::NONE, Geometry{0,0,0,0}, 0, 0, Layout::NONE, 0))
 {
 }

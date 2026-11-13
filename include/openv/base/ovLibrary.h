@@ -22,9 +22,9 @@ public:
     
     bool isLoaded() const;
 
-    std::string name() const;
+    const std::string& name() const;
     
-    std::string errorString() const;
+    const std::string& errorString() const;
 
     ov::FunctionPointer resolve(const char* symbol);
 

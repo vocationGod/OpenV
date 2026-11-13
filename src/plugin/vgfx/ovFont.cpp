@@ -8,7 +8,7 @@ ov::Font::Font(const std::string &family, double pixelSize) : name(family), size
 {
 }
 
-std::string ov::Font::family() const
+const std::string& ov::Font::family() const
 {
     return name;
 }

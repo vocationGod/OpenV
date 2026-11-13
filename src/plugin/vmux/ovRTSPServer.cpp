@@ -1,11 +1,10 @@
 #include "ovRTSPServer.h"
-#include "ovElement_p.h"
 #include "ovEnvironment.h"
 #include "ovPluginLoader.h"
 #include "ovFragment.h"
 #include "ovDir.h"
 
-class ov::RTSPServerPrivate : public ElementPrivate
+class ov::RTSPServerPrivate
 {
     OPENV_DECLARE_PUBLIC(RTSPServer)
 public:
@@ -98,7 +97,7 @@ int ov::RTSPServer::capacity() const
     return d->capacity;
 }
 
-std::vector<ov::RTSPServer::Session> ov::RTSPServer::sessions() const
+const std::vector<ov::RTSPServer::Session>& ov::RTSPServer::sessions() const
 {
     OPENV_D(const RTSPServer);
     return d->sessions;
@@ -117,6 +116,6 @@ bool ov::RTSPServer::submit(const Session &session, const std::shared_ptr<ov::Fr
     return transmit(session, fragment, timeout);
 }
 
-ov::RTSPServer::RTSPServer() : Element(std::make_unique<RTSPServerPrivate>(std::vector<Session>{}, 0, 0))
+ov::RTSPServer::RTSPServer() : dptr(std::make_unique<RTSPServerPrivate>(std::vector<Session>{}, 0, 0))
 {
 }

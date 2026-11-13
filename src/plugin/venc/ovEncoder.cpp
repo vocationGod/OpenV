@@ -1,12 +1,11 @@
 #include "ovEncoder.h"
-#include "ovElement_p.h"
 #include "ovEnvironment.h"
 #include "ovPluginLoader.h"
 #include "ovFragment.h"
 #include "ovImage.h"
 #include "ovDir.h"
 
-class ov::EncoderPrivate : public ElementPrivate
+class ov::EncoderPrivate
 {
     OPENV_DECLARE_PUBLIC(Encoder);
 public:
@@ -153,6 +152,6 @@ bool ov::Encoder::submit(const std::shared_ptr<ov::Image> &image, int timeout)
     return transmit(image, timeout);
 }
 
-ov::Encoder::Encoder() : Element(std::make_unique<EncoderPrivate>(0, 0, Layout::NONE, Media::NONE, 0))
+ov::Encoder::Encoder() : dptr(std::make_unique<EncoderPrivate>(0, 0, Layout::NONE, Media::NONE, 0))
 {
 }

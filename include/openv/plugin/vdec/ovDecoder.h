@@ -8,6 +8,7 @@
 #pragma once
 #include "openv/core/ovElement.h"
 #include "openv/core/ovMedia.h"
+#include <memory>
 #include <string>
 namespace ov {
 
@@ -48,6 +49,9 @@ protected:
 
 protected:
     explicit Decoder();
+
+private:
+    std::unique_ptr<DecoderPrivate> dptr;
 };
 
 OPENV_DECLARE_INTERFACE(Decoder, "ov.iid.decoder")

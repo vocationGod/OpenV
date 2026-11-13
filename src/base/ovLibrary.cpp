@@ -164,13 +164,13 @@ ov::FunctionPointer ov::Library::resolve(const char *symbol)
     return sym;
 }
 
-std::string ov::Library::name() const
+const std::string& ov::Library::name() const
 {
     OPENV_D(const Library);
     return d->name;
 }
 
-std::string ov::Library::errorString() const
+const std::string& ov::Library::errorString() const
 {
     OPENV_D(const Library);
     return d->errorString;
