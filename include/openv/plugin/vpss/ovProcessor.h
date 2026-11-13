@@ -4,6 +4,7 @@
 #include "openv/base/ovFlags.h"
 #include <optional>
 #include <memory>
+#include <string>
 namespace ov {
 
 class Image;

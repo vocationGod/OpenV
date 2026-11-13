@@ -16,7 +16,7 @@ private:
     std::weak_ptr<Image> image;
 };
 
-ov::Syncer::Syncer(const std::shared_ptr<Image> &image): dptr(std::make_unique<SyncerPrivate>())
+ov::Syncer::Syncer(const std::shared_ptr<Image> &image): dptr(std::make_unique<SyncerPrivate>(image))
 {
 }
 

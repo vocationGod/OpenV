@@ -9,6 +9,7 @@
 #include "openv/core/ovElement.h"
 #include "openv/core/ovLayout.h"
 #include "openv/core/ovMedia.h"
+#include <optional>
 #include <memory>
 #include <string>
 namespace ov {

@@ -45,7 +45,7 @@ public:
     constexpr operator enum_type() const { return value; }
     constexpr operator bool() const { return !!value; }
 
-    constexpr bool empty() const { return !value }
+    constexpr bool empty() const { return !value; }
 
 private:
     enum_type value;

@@ -7,7 +7,7 @@ class ov::PluginLoaderPrivate
 {
     OPENV_DECLARE_PUBLIC(PluginLoader)
 public:
-    explicit PluginLoaderPrivate(const std::string& name) : library(std::make_unique<Library>()) {}
+    explicit PluginLoaderPrivate(const std::string& name) : library(std::make_unique<Library>(name)) {}
 
 private:
     std::unique_ptr<Library> library;

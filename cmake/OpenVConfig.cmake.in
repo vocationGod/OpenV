@@ -1,0 +1,38 @@
+@PACKAGE_INIT@
+
+include("${CMAKE_CURRENT_LIST_DIR}/OpenVTargets.cmake")
+
+set(OpenV_SUPPORTED_COMPONENTS base core vcam venc vdec vwin vgfx vpss vmux)
+foreach(_comp IN LISTS OpenV_SUPPORTED_COMPONENTS)
+    if(TARGET OpenV::${_comp})
+        set(OpenV_${_comp}_FOUND TRUE)
+    else()
+        set(OpenV_${_comp}_FOUND FALSE)
+    endif()
+endforeach()
+
+set(_openv_compile_defs "")
+foreach(_comp base core vcam venc vdec vwin vgfx vpss vmux)
+    if(OpenV_${_comp}_FOUND)
+        string(TOUPPER "${_comp}" _comp_upper)
+        list(APPEND _openv_compile_defs "HAVE_OPENV_PLUGIN_${_comp_upper}")
+    endif()
+endforeach()
+
+if(_openv_compile_defs)
+    foreach(_target
+            OpenV::base OpenV::core
+            OpenV::vcam OpenV::venc OpenV::vdec OpenV::vwin OpenV::vgfx OpenV::vpss OpenV::vmux)
+        if(TARGET ${_target})
+            set_property(TARGET ${_target} APPEND PROPERTY
+                INTERFACE_COMPILE_DEFINITIONS ${_openv_compile_defs})
+        endif()
+    endforeach()
+endif()
+
+unset(_openv_compile_defs)
+unset(_comp)
+unset(_comp_upper)
+unset(_target)
+
+check_required_components(OpenV)
