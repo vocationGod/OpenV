@@ -129,7 +129,7 @@ std::shared_ptr<T> openv_plugin_factory(const std::string& env, const std::strin
         }
 
         auto plugin = std::static_pointer_cast<T>(ins);
-        if(plugin) {
+        if(setter) {
             setter(plugin.get());
         }
 
