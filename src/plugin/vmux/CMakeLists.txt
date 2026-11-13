@@ -16,7 +16,7 @@ target_include_directories(vmux
         $<INSTALL_INTERFACE:include>
 )
 
-target_link_libraries(vmux PRIVATE OpenV::base OpenV::core)
+target_link_libraries(vmux PUBLIC OpenV::base OpenV::core)
 
 target_compile_definitions(vmux PUBLIC HAVE_OPENV_PLUGIN_VMUX)
 

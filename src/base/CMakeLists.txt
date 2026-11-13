@@ -34,12 +34,12 @@ set(OPENV_HEADERS
 )
 
 set(OPENV_BASE_HEADERS
-    "${PROJECT_SOURCE_DIR}/include/openv/base/ovDir.h"
+    # "${PROJECT_SOURCE_DIR}/include/openv/base/ovDir.h"
     "${PROJECT_SOURCE_DIR}/include/openv/base/ovFlags.h"
     "${PROJECT_SOURCE_DIR}/include/openv/base/ovPlugin.h"
-    "${PROJECT_SOURCE_DIR}/include/openv/base/ovLibrary.h"
+    # "${PROJECT_SOURCE_DIR}/include/openv/base/ovLibrary.h"
     "${PROJECT_SOURCE_DIR}/include/openv/base/ovEnvironment.h"
-    "${PROJECT_SOURCE_DIR}/include/openv/base/ovPluginLoader.h"
+    # "${PROJECT_SOURCE_DIR}/include/openv/base/ovPluginLoader.h"
 )
 
 install(FILES ${OPENV_HEADERS} DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/openv")

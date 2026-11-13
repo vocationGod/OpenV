@@ -16,7 +16,7 @@ target_include_directories(vpss
         $<INSTALL_INTERFACE:include>
 )
 
-target_link_libraries(vpss PRIVATE OpenV::base OpenV::core)
+target_link_libraries(vpss PUBLIC OpenV::base OpenV::core)
 
 target_compile_definitions(vpss PUBLIC HAVE_OPENV_PLUGIN_VPSS)
 

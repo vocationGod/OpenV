@@ -2,6 +2,26 @@
 #include "openv/plugin/vgfx/ovColor.h"
 namespace ov {
 
+enum PenStyle
+{
+    NoPen,
+    SolidLine,
+};
+
+enum PenCapStyle
+{
+    FlatCap,
+    SquareCap,
+    RoundCap,
+};
+
+enum PenJoinStyle
+{
+    MiterJoin,
+    BevelJoin,
+    RoundJoin,
+};
+
 class OPENV_API Pen final
 {
 public:

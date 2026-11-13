@@ -16,7 +16,7 @@ target_include_directories(vdec
         $<INSTALL_INTERFACE:include>
 )
 
-target_link_libraries(vdec PRIVATE OpenV::base OpenV::core)
+target_link_libraries(vdec PUBLIC OpenV::base OpenV::core)
 
 target_compile_definitions(vdec PUBLIC HAVE_OPENV_PLUGIN_VDEC)
 

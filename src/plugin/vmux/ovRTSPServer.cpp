@@ -21,7 +21,7 @@ private:
 
 std::shared_ptr<ov::RTSPServer> ov::RTSPServer::gen(const std::vector<Session> &sessions, int port, int capacity, const std::string &dir)
 {
-    if((capacity < 2) || (port <= 0)) {
+    if((capacity < 2) || (port <= 0) || (port > 65535)) {
         return {};
     }
 

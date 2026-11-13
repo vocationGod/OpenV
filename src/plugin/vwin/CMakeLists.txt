@@ -16,7 +16,7 @@ target_include_directories(vwin
         $<INSTALL_INTERFACE:include>
 )
 
-target_link_libraries(vwin PRIVATE OpenV::base OpenV::core)
+target_link_libraries(vwin PUBLIC OpenV::base OpenV::core)
 
 target_compile_definitions(vwin PUBLIC HAVE_OPENV_PLUGIN_VWIN)
 

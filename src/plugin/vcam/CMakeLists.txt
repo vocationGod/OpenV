@@ -16,7 +16,7 @@ target_include_directories(vcam
         $<INSTALL_INTERFACE:include>
 )
 
-target_link_libraries(vcam PRIVATE OpenV::base OpenV::core)
+target_link_libraries(vcam PUBLIC OpenV::base OpenV::core)
 
 target_compile_definitions(vcam PUBLIC HAVE_OPENV_PLUGIN_VCAM)
 

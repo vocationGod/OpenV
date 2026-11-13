@@ -39,7 +39,10 @@ if(MSVC)
     add_compile_options(/utf-8)
 endif()
 
-set(BUILD_SHARED_LIBS ON)
+if(NOT BUILD_SHARED_LIBS) 
+    set(BUILD_SHARED_LIBS ON)
+    message(WARNING "must be shared library")
+endif()
 
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)

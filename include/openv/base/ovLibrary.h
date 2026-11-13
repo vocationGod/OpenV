@@ -4,11 +4,7 @@
 #include <memory>
 namespace ov {
 
-#ifdef _WIN32
-    using FunctionPointer = FARPROC;
-#else 
-    using FunctionPointer = void*;
-#endif
+using FunctionPointer = void*;
 
 class LibraryPrivate;
 class OPENV_API Library final 

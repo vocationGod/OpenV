@@ -2,6 +2,12 @@
 #include "openv/plugin/vgfx/ovColor.h"
 namespace ov {
 
+enum BrushStyle
+{
+    NoBrush,
+    SolidPattern,
+};
+
 class OPENV_API Brush final
 {
 public:

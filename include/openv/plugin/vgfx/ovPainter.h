@@ -9,6 +9,19 @@
 #include <array>
 namespace ov {
 
+enum Alignment
+{
+    AlignTop        = 1 << 0,
+    AlignLeft       = 1 << 1,
+    AlignRight      = 1 << 2,
+    AlignBottom     = 1 << 3,
+    AlignHCenter    = 1 << 4,
+    AlignVCenter    = 1 << 5,
+    AlignCenter     = AlignVCenter | AlignHCenter,
+};
+using Alignments = Flags<Alignment>;
+OPENV_FLAGS_ENABLE_OPERATORS(ov::Alignment)
+
 class Image;
 class PainterPrivate;
 class OPENV_API Painter : public Plugin

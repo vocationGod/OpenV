@@ -1,8 +1,29 @@
 #pragma once
-#include "openv/plugin/vgfx/ovGfx.h"
 #include "openv/openv.h"
 #include <cstdint>
 namespace ov {
+
+enum GlobalColor
+{
+    white,          // #ffffffff
+    black,          // #000000ff 
+    red,            // #ff0000ff 
+    darkRed,        // #800000ff 
+    green,          // #00ff00ff 
+    darkGreen,      // #008000ff 
+    blue,           // #0000ffff 
+    darkBlue,       // #000080ff 
+    cyan,           // #00ffffff 
+    darkCyan,       // #008080ff 
+    magenta,        // #ff00ffff 
+    darkMagenta,    // #800080ff 
+    yellow,         // #ffff00ff 
+    darkYellow,     // #808000ff 
+    gray,           // #a0a0a4ff
+    darkGray,       // #808080ff
+    lightGray,      // #c0c0c0ff 
+    transparent,    // #00000000
+};
 
 class OPENV_API Color final
 {

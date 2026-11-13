@@ -83,7 +83,12 @@ std::shared_ptr<ov::Plugin> ov::PluginLoader::instantiate(const char* module)
             return {};
         }
 
-        if(std::strcmp(module, openv_plugin_module())) {
+        auto name = openv_plugin_module();
+        if(!name) {
+            return {};
+        }
+
+        if(std::strcmp(module, name)) {
             return {};
         }
     }

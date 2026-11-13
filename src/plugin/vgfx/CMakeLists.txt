@@ -20,7 +20,7 @@ target_include_directories(vgfx
         $<INSTALL_INTERFACE:include>
 )
 
-target_link_libraries(vgfx PRIVATE OpenV::base OpenV::core)
+target_link_libraries(vgfx PUBLIC OpenV::base OpenV::core)
 
 target_compile_definitions(vgfx PUBLIC HAVE_OPENV_PLUGIN_VGFX)
 

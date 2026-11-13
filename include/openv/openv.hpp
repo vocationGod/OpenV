@@ -66,7 +66,6 @@
 #endif
 
 #ifdef HAVE_OPENV_PLUGIN_VGFX
-    #include "openv/plugin/vgfx/ovGfx.h"
     #include "openv/plugin/vgfx/ovPen.h"
     #include "openv/plugin/vgfx/ovFont.h"
     #include "openv/plugin/vgfx/ovColor.h"

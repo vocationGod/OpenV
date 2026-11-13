@@ -20,9 +20,6 @@ public:
     explicit Syncer(const std::shared_ptr<Image>& image);
     ~Syncer();
 
-public:
-    bool sync();
-
 private:
     std::unique_ptr<SyncerPrivate> dptr;
 };
